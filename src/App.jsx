@@ -11,6 +11,7 @@ export default function App() {
   const [speed, setSpeed] = useState(1)
   const [currentTime, setCurrentTime] = useState(0)
   const [playerReady, setPlayerReady] = useState(false)
+  const [setMode, setSetMode] = useState('start')
 
   useEffect(() => {
     const tag = document.createElement('script')
@@ -129,6 +130,19 @@ export default function App() {
     }
   }
 
+  const setToCurrentTime = () => {
+    const rounded = parseFloat(currentTime.toFixed(1))
+    if (setMode === 'start') {
+      if (rounded < endTime - 0.1) {
+        setStartTime(rounded)
+      }
+    } else {
+      if (rounded > startTime + 0.1) {
+        setEndTime(rounded)
+      }
+    }
+  }
+
   return (
     <div className="app">
       <h1>Comedy Loop Practice</h1>
@@ -164,6 +178,24 @@ export default function App() {
             <option value={1.5}>1.5x</option>
             <option value={2}>2x</option>
           </select>
+        </div>
+
+        <div className="set-time-control">
+          <button
+            className={`toggle-btn ${setMode === 'start' ? 'active' : ''}`}
+            onClick={() => setSetMode('start')}
+          >
+            SET START
+          </button>
+          <button
+            className={`toggle-btn ${setMode === 'end' ? 'active' : ''}`}
+            onClick={() => setSetMode('end')}
+          >
+            SET END
+          </button>
+          <button onClick={setToCurrentTime} className="btn btn-set">
+            ⏱ Set to Current Time
+          </button>
         </div>
       </div>
 
