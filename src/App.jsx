@@ -109,6 +109,18 @@ export default function App() {
     return `${mins}:${secs.toString().padStart(2, '0')}`
   }
 
+  const adjustStartTime = (delta) => {
+    let newStart = startTime + delta
+    newStart = Math.max(0, Math.min(newStart, endTime - 0.1))
+    setStartTime(parseFloat(newStart.toFixed(1)))
+  }
+
+  const adjustEndTime = (delta) => {
+    let newEnd = endTime + delta
+    newEnd = Math.max(startTime + 0.1, Math.min(newEnd, duration))
+    setEndTime(parseFloat(newEnd.toFixed(1)))
+  }
+
   return (
     <div className="app">
       <h1>Comedy Loop Practice</h1>
@@ -154,6 +166,7 @@ export default function App() {
 
         <div className="slider-container">
           <label>Start (seconds):</label>
+          <button className="adj-btn" onClick={() => adjustStartTime(-0.5)}>−</button>
           <input
             type="range"
             min="0"
@@ -163,11 +176,13 @@ export default function App() {
             onChange={(e) => setStartTime(parseFloat(e.target.value))}
             className="slider"
           />
+          <button className="adj-btn" onClick={() => adjustStartTime(0.5)}>+</button>
           <span>{formatTime(startTime)}</span>
         </div>
 
         <div className="slider-container">
           <label>End (seconds):</label>
+          <button className="adj-btn" onClick={() => adjustEndTime(-0.5)}>−</button>
           <input
             type="range"
             min={startTime}
@@ -177,6 +192,7 @@ export default function App() {
             onChange={(e) => setEndTime(parseFloat(e.target.value))}
             className="slider"
           />
+          <button className="adj-btn" onClick={() => adjustEndTime(0.5)}>+</button>
           <span>{formatTime(endTime)}</span>
         </div>
 
