@@ -112,13 +112,21 @@ export default function App() {
   const adjustStartTime = (delta) => {
     let newStart = startTime + delta
     newStart = Math.max(0, Math.min(newStart, endTime - 0.1))
-    setStartTime(parseFloat(newStart.toFixed(1)))
+    newStart = parseFloat(newStart.toFixed(1))
+    setStartTime(newStart)
+    if (playerRef.current) {
+      playerRef.current.seekTo(newStart)
+    }
   }
 
   const adjustEndTime = (delta) => {
     let newEnd = endTime + delta
     newEnd = Math.max(startTime + 0.1, Math.min(newEnd, duration))
-    setEndTime(parseFloat(newEnd.toFixed(1)))
+    newEnd = parseFloat(newEnd.toFixed(1))
+    setEndTime(newEnd)
+    if (playerRef.current) {
+      playerRef.current.seekTo(newEnd)
+    }
   }
 
   return (
