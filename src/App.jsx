@@ -201,9 +201,12 @@ export default function App() {
         <input
           type="text"
           placeholder="Paste YouTube URL..."
-          onBlur={handleLoadVideo}
+          id="url-input"
           className="url-input"
         />
+        <button onClick={() => handleLoadVideo({ target: { value: document.getElementById('url-input').value } })} className="btn btn-load-video">
+          📺 Load Video
+        </button>
       </div>
 
       <div id="youtube-player"></div>
