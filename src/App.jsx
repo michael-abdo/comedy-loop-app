@@ -12,6 +12,19 @@ export default function App() {
   const [currentTime, setCurrentTime] = useState(0)
   const [playerReady, setPlayerReady] = useState(false)
   const [setMode, setSetMode] = useState('start')
+  const [savedClips, setSavedClips] = useState([])
+  const [clipLabel, setClipLabel] = useState('')
+
+  useEffect(() => {
+    const saved = localStorage.getItem('comedyLoopClips')
+    if (saved) {
+      setSavedClips(JSON.parse(saved))
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('comedyLoopClips', JSON.stringify(savedClips))
+  }, [savedClips])
 
   useEffect(() => {
     const tag = document.createElement('script')
@@ -143,6 +156,43 @@ export default function App() {
     }
   }
 
+  const saveClip = () => {
+    if (!videoId || !clipLabel.trim()) return
+    const newClip = {
+      id: Date.now(),
+      videoId,
+      startTime: parseFloat(startTime.toFixed(1)),
+      endTime: parseFloat(endTime.toFixed(1)),
+      label: clipLabel.trim(),
+      savedAt: new Date().toISOString(),
+    }
+    setSavedClips([...savedClips, newClip])
+    setClipLabel('')
+  }
+
+  const loadClip = (clip) => {
+    setVideoId(clip.videoId)
+    setStartTime(clip.startTime)
+    setEndTime(clip.endTime)
+  }
+
+  const deleteClip = (id) => {
+    setSavedClips(savedClips.filter(c => c.id !== id))
+  }
+
+  const exportClips = () => {
+    const data = JSON.stringify(savedClips, null, 2)
+    const blob = new Blob([data], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `comedy-clips-${new Date().toISOString().split('T')[0]}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <div className="app">
       <h1>Comedy Loop Practice</h1>
@@ -199,6 +249,27 @@ export default function App() {
         </div>
       </div>
 
+      <div className="save-clip-section">
+        <div className="save-clip-controls">
+          <input
+            type="text"
+            placeholder="Clip label (e.g., 'Punchline timing')..."
+            value={clipLabel}
+            onChange={(e) => setClipLabel(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && saveClip()}
+            className="clip-label-input"
+          />
+          <button onClick={saveClip} className="btn btn-save-clip">
+            💾 Save Clip
+          </button>
+          {savedClips.length > 0 && (
+            <button onClick={exportClips} className="btn btn-export">
+              📥 Export JSON
+            </button>
+          )}
+        </div>
+      </div>
+
       <div className="timeline-section">
         <div className="time-display">
           Current: {formatTime(currentTime)} | Loop: {formatTime(startTime)} - {formatTime(endTime)}
@@ -240,6 +311,38 @@ export default function App() {
           Duration: {formatTime(duration)} | Loop length: {formatTime(endTime - startTime)}s
         </div>
       </div>
+
+      {savedClips.length > 0 && (
+        <div className="saved-clips-section">
+          <h2>Saved Clips ({savedClips.length})</h2>
+          <div className="clips-list">
+            {savedClips.map(clip => (
+              <div key={clip.id} className="clip-item">
+                <div className="clip-info">
+                  <div className="clip-label">{clip.label}</div>
+                  <div className="clip-time">
+                    {formatTime(clip.startTime)} - {formatTime(clip.endTime)}
+                  </div>
+                </div>
+                <div className="clip-actions">
+                  <button
+                    onClick={() => loadClip(clip)}
+                    className="btn btn-small btn-load"
+                  >
+                    Load
+                  </button>
+                  <button
+                    onClick={() => deleteClip(clip.id)}
+                    className="btn btn-small btn-delete"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

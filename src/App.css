@@ -255,3 +255,133 @@ h1 {
   padding-top: 16px;
   border-top: 1px solid #f0f0f0;
 }
+
+.save-clip-section {
+  margin-bottom: 24px;
+}
+
+.save-clip-controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.clip-label-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 12px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.clip-label-input:focus {
+  outline: none;
+  border-color: #1f5ba4;
+}
+
+.btn-save-clip {
+  background: #10a37f;
+  color: white;
+  padding: 10px 16px;
+}
+
+.btn-save-clip:hover {
+  background: #0d8c6f;
+  box-shadow: 0 2px 6px rgba(16, 163, 127, 0.3);
+}
+
+.btn-export {
+  background: #6366f1;
+  color: white;
+  padding: 10px 16px;
+}
+
+.btn-export:hover {
+  background: #4f46e5;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.3);
+}
+
+.saved-clips-section {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  margin-top: 24px;
+}
+
+.saved-clips-section h2 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.clips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.clip-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #f9f9f9;
+}
+
+.clip-info {
+  flex: 1;
+}
+
+.clip-label {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.clip-time {
+  font-size: 12px;
+  color: #666;
+  font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.clip-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-load {
+  background: #1f5ba4;
+  color: white;
+}
+
+.btn-load:hover {
+  background: #184a80;
+  box-shadow: 0 2px 4px rgba(31, 91, 164, 0.3);
+}
+
+.btn-delete {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #dc2626;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
