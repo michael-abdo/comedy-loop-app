@@ -10,6 +10,7 @@ export default function App() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [speed, setSpeed] = useState(1)
   const [currentTime, setCurrentTime] = useState(0)
+  const [playerReady, setPlayerReady] = useState(false)
 
   useEffect(() => {
     const tag = document.createElement('script')
@@ -20,7 +21,7 @@ export default function App() {
       playerRef.current = new window.YT.Player('youtube-player', {
         height: '450',
         width: '100%',
-        videoId: videoId || 'dQw4w9WgXcQ',
+        videoId: videoId || 'tRuY2fTTRi8',
         events: {
           onReady: onPlayerReady,
           onStateChange: onPlayerStateChange,
@@ -43,10 +44,17 @@ export default function App() {
   }, [videoId])
 
   useEffect(() => {
-    if (playerRef.current && playerRef.current.setPlaybackRate) {
-      playerRef.current.setPlaybackRate(speed)
+    if (playerReady && playerRef.current) {
+      try {
+        const availableRates = playerRef.current.getAvailablePlaybackRates()
+        if (availableRates.includes(speed)) {
+          playerRef.current.setPlaybackRate(speed)
+        }
+      } catch (e) {
+        console.log('Speed control not available')
+      }
     }
-  }, [speed])
+  }, [speed, playerReady])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -65,6 +73,8 @@ export default function App() {
 
   const onPlayerReady = (event) => {
     setDuration(event.target.getDuration())
+    setPlayerReady(true)
+    event.target.setPlaybackRate(speed)
   }
 
   const onPlayerStateChange = (event) => {
