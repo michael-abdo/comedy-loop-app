@@ -14,6 +14,22 @@ export default function App() {
   const [setMode, setSetMode] = useState('start')
   const [savedClips, setSavedClips] = useState([])
   const [clipLabel, setClipLabel] = useState('')
+  const [theme, setTheme] = useState('light')
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('comedyLoopTheme') || 'light'
+    setTheme(savedTheme)
+    document.documentElement.setAttribute('data-theme', savedTheme)
+  }, [])
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+    localStorage.setItem('comedyLoopTheme', theme)
+  }, [theme])
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light')
+  }
 
   useEffect(() => {
     const saved = localStorage.getItem('comedyLoopClips')
@@ -195,7 +211,17 @@ export default function App() {
 
   return (
     <div className="app">
-      <h1>Comedy Loop Practice</h1>
+      <div className="header">
+        <h1>Comedy Loop Practice</h1>
+        <button
+          onClick={toggleTheme}
+          className="btn-theme-toggle"
+          title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+          aria-label="Toggle theme"
+        >
+          {theme === 'light' ? '🌙' : '☀️'}
+        </button>
+      </div>
 
       <div className="input-section">
         <input
